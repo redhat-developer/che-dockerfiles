@@ -1,0 +1,1 @@
+FROM registry.centos.org/che-stacks/vertx

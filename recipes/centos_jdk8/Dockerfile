@@ -1,0 +1,1 @@
+FROM eclipse/centos_jdk8

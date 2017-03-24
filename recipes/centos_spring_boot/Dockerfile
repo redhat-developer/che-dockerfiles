@@ -1,0 +1,1 @@
+FROM eclipse/centos_spring_boot
