@@ -8,7 +8,7 @@ set -u
 set +e
 
 # Source build variables
-cat jenkins-env | grep -e ^GIT_ > inherit-env
+cat jenkins-env | grep -e ^CHE_ > inherit-env
 . inherit-env
 
 # Update machine, get required deps in place
@@ -16,7 +16,7 @@ yum -y update
 yum -y install docker git
 
 exit_with_error="no"
-git_tag=$(GIT_COMMIT)
+git_tag=$(git rev-parse --short HEAD)
 
 docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
 
