@@ -1,1 +1,1 @@
-FROM eclipse/centos_spring_boot
+FROM registry.centos.org/che-stacks/spring-boot
