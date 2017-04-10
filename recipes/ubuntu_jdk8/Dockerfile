@@ -1,3 +1,11 @@
+# Copyright (c) 2012-2017 Red Hat, Inc.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
+# Contributors:
+# Red Hat, Inc. - initial implementation
+
 FROM eclipse/ubuntu_jdk8:latest
 
 # Install nss_wrapper and gettext
@@ -21,7 +29,9 @@ RUN sudo chgrp -R 0 /home/user \
   && sudo chgrp -R 0 /etc/passwd \
   && sudo chmod -R g+rwX /etc/passwd \
   && sudo chgrp -R 0 /etc/group \
-  && sudo chmod -R g+rwX /etc/group
+  && sudo chmod -R g+rwX /etc/group \
+  && sudo chgrp -R 0 /projects \
+  && sudo chmod -R g+rwX /projects
   
 # Generate passwd.template
 RUN cat /etc/passwd | \
