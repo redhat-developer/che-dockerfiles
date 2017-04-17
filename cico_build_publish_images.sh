@@ -24,7 +24,7 @@ for d in recipes/*/ ; do
   image=$(basename $d)
 
   echo "Building $image"
-  docker build -t ${image} .
+  docker build -t ${image} ${d}
   if [ $? -ne 0 ]; then
      echo 'ERROR: Docker build failed'
      exit_with_error="yes"
