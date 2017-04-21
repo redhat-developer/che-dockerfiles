@@ -22,6 +22,12 @@ RUN sudo yum update -y && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
+# Install dependencies for ls agents
+RUN sudo yum update -y && \
+    sudo yum install -y bzip2 tar curl && \
+    sudo yum clean all && \
+    sudo rm -rf /tmp/* /var/cache/yum
+
 RUN sudo yum install -y gettext
 
 # The following lines are needed to set the correct locale after `yum update`

@@ -22,6 +22,13 @@ RUN sudo apt-get update && \
     sudo apt-get -y clean && \
     sudo rm -rf /var/lib/apt/lists/*
 
+# Install nodejs for ls agents
+RUN sudo apt-get update && \
+    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - && \
+    sudo apt-get install -y bzip2 tar curl nodejs && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/*
+
 # Give write access to /home/user for 
 # users with an arbitrary UID 
 RUN sudo chgrp -R 0 /home/user \
