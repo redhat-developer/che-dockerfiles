@@ -8,6 +8,10 @@
 
 FROM registry.centos.org/che-stacks/centos-nodejs
 
+ARG JAVA_VERSION=1.8.0
+
+ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}
+
 # Install nss_wrapper and gettext
 RUN sudo yum update -y && \
     sudo yum install -y cmake gettext make gcc git && \
@@ -18,13 +22,14 @@ RUN sudo yum update -y && \
     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DLIB_SUFFIX=64 .. && \
     make && sudo make install && \
     cd /home/user && rm -rf ./nss_wrapper && \
-    sudo yum remove -y cmake make gcc && \
+    #sudo yum remove -y cmake make gcc && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
 # Install dependencies for ls agents
 RUN sudo yum update -y && \
     sudo yum install -y bzip2 tar curl && \
+    sudo yum -y install java-${JAVA_VERSION}-openjdk-devel && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
@@ -35,8 +40,8 @@ RUN sudo yum install -y gettext
 RUN sudo localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG="C.UTF-8"
 
-# Give write access to /home/user for 
-# users with an arbitrary UID 
+# Give write access to /home/user for
+# users with an arbitrary UID
 RUN sudo chgrp -R 0 /home/user \
   && sudo chmod -R g+rwX /home/user \
   && sudo chgrp -R 0 /etc/passwd \
@@ -46,7 +51,7 @@ RUN sudo chgrp -R 0 /home/user \
   && sudo mkdir -p /projects \
   && sudo chgrp -R 0 /projects \
   && sudo chmod -R g+rwX /projects
-  
+
 # Generate passwd.template
 RUN cat /etc/passwd | \
     sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \
