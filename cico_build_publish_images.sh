@@ -5,7 +5,7 @@
 # this script assumes its being run on CentOS Linux 7/x86_64
 
 set -u
-set +e
+set -e
 
 # Source build variables
 cat jenkins-env | grep PASS > inherit-env
@@ -14,6 +14,8 @@ cat jenkins-env | grep PASS > inherit-env
 # Update machine, get required deps in place
 yum -y update
 yum -y install docker git
+
+systemctl start docker
 
 exit_with_error="no"
 git_tag=$(git rev-parse --short HEAD)
