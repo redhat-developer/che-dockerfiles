@@ -55,7 +55,7 @@ RUN cat /etc/passwd | \
 
 # Generate group.template
 RUN cat /etc/group | \
-    sed s#root:x:0:#root:x:0,\${USER_ID}:#g \
+    sed s#root:x:0:#root:x:0:0,\${USER_ID}:#g \
     > /home/user/group.template
 
 ENV HOME /home/user
