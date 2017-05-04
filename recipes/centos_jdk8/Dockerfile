@@ -62,6 +62,7 @@ ENV HOME /home/user
 
 # Overwride entrypoint
 COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
+COPY ["log.sh","/home/user/log.sh"]
 
 ENTRYPOINT ["/home/user/entrypoint.sh"]
-CMD tail -f /dev/null
+CMD /home/user/log.sh
