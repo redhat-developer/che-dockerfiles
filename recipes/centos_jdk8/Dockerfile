@@ -8,6 +8,8 @@
 
 FROM eclipse/centos_jdk8
 
+LABEL che:server:8080:ref=tomcat che:server:8080:protocol=http che:server:8000:ref=tomcat-jpda che:server:8000:protocol=http
+
 # Install nss_wrapper and gettext
 RUN sudo yum update -y && \
     sudo yum install -y cmake gettext make gcc && \
