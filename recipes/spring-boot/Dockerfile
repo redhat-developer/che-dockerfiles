@@ -42,7 +42,7 @@ RUN sudo chgrp -R 0 /home/user \
   && sudo chmod -R g+rwX /etc/passwd \
   && sudo chgrp -R 0 /etc/group \
   && sudo chmod -R g+rwX /etc/group \
-  && sudo mkdir /projects \
+  && sudo mkdir -p /projects \
   && sudo chgrp -R 0 /projects \
   && sudo chmod -R g+rwX /projects
   
