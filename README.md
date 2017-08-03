@@ -1,2 +1,2 @@
 # che-dockerfiles
-Che dockerfiles extended with security in mind.
+Che dockerfiles extended with security in mind
