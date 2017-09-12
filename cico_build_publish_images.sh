@@ -8,7 +8,7 @@ set -u
 set -e
 
 # Source build variables
-cat jenkins-env | grep PASS > inherit-env
+cat jenkins-env | grep -e RHCHEBOT_DOCKER_HUB_PASSWORD -e DEVSHIFT > inherit-env
 . inherit-env
 
 # Update machine, get required deps in place
@@ -20,8 +20,6 @@ systemctl start docker
 exit_with_error="no"
 git_tag=$(git rev-parse --short HEAD)
 
-docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
-
 for d in recipes/*/ ; do
   image=$(basename $d)
 
@@ -32,14 +30,28 @@ for d in recipes/*/ ; do
      exit_with_error="yes"
      continue
   fi
-  echo 'Image built successfully'  
+  echo 'Image built successfully'
 
-  declare -a tags=(rhche/${image}:latest
-                   rhche/${image}:${git_tag}
-                   registry.devshift.net/che/${image}:latest
-                   registry.devshift.net/che/${image}:${git_tag})
-  
-  for new_tag in "${tags[@]}"; do
+  # Pushing to DockerHub
+  docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
+
+  declare -a tags_dockerhub=(rhche/${image}:latest
+                             rhche/${image}:${git_tag})
+
+  for new_tag in "${tags_dockerhub[@]}"; do
+    echo "Tagging ${new_tag}"
+    docker tag ${image}:latest ${new_tag}
+    echo "Pushing ${new_tag}"
+    docker push ${new_tag}
+  done
+
+  # Pushing to 'push.registry.devshift.net'
+  docker login -u $DEVSHIFT_USERNAME -p $DEVSHIFT_PASSWORD push.registry.devshift.net
+
+  declare -a tags_devshift=(push.registry.devshift.net/che/${image}:latest
+                            push.registry.devshift.net/che/${image}:${git_tag})
+
+  for new_tag in "${tags_devshift[@]}"; do
     echo "Tagging ${new_tag}"
     docker tag ${image}:latest ${new_tag}
     echo "Pushing ${new_tag}"
