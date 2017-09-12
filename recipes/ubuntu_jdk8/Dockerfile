@@ -8,6 +8,8 @@
 
 FROM eclipse/ubuntu_jdk8:latest
 
+ARG OC_VERSION=3.6.173.0.30
+
 # Install nss_wrapper and gettext
 RUN sudo apt-get update && \
     sudo apt-get install -y cmake gettext && \
@@ -22,10 +24,12 @@ RUN sudo apt-get update && \
     sudo apt-get -y clean && \
     sudo rm -rf /var/lib/apt/lists/*
 
-# Install nodejs for ls agents
+# Install nodejs for ls agents and OpenShift CLI
 RUN sudo apt-get update && \
     curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - && \
-    sudo apt-get install -y bzip2 tar curl nodejs && \
+    sudo apt-get install -y bzip2 tar curl wget nodejs && \
+    sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
+    sudo apt-get remove -y wget && \
     sudo apt-get clean && \
     sudo rm -rf /var/lib/apt/lists/*
 
