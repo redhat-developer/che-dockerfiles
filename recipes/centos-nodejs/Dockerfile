@@ -9,6 +9,7 @@
 FROM registry.centos.org/che-stacks/centos-nodejs
 
 ARG JAVA_VERSION=1.8.0
+ARG OC_VERSION=3.6.173.0.30
 
 ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}
 
@@ -26,10 +27,12 @@ RUN sudo yum update -y && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
-# Install dependencies for ls agents
+# Install dependencies for ls agents and OpenShift CLI
 RUN sudo yum update -y && \
-    sudo yum install -y bzip2 tar curl && \
+    sudo yum install -y bzip2 tar wget curl && \
     sudo yum -y install java-${JAVA_VERSION}-openjdk-devel && \
+    sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
+    sudo yum remove -y wget && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 

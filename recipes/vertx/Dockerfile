@@ -24,7 +24,7 @@ RUN sudo yum update -y && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
-# Install nodejs for ls agents and OpenShift CLI 
+# Install nodejs for ls agents and OpenShift CLI
 RUN sudo yum update -y && \
     curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash - && \
     sudo yum install -y bzip2 tar curl wget nodejs && \
