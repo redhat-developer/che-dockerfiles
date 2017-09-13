@@ -67,3 +67,12 @@ COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
 
 ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
+
+COPY ["init-maven.sh","/tmp/init-maven.sh"]
+ADD https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/configmap/spring-boot/spring-boot-configmap-booster.yaml /tmp/booster1.yaml
+ADD https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/health-check/spring-boot/spring-boot-health-check-booster.yaml /tmp/booster2.yaml
+ADD https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/rest-http/spring-boot/spring-boot-rest-http-booster.yaml /tmp/booster3.yaml
+RUN sudo chown user:user /tmp/init-maven.sh /tmp/booster*.yaml && \
+    chmod +x /tmp/init-maven.sh && \
+    /tmp/init-maven.sh && \
+    sudo rm -f /tmp/init-maven.sh
