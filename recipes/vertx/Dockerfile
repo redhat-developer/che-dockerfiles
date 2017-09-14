@@ -69,10 +69,9 @@ ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
 
 COPY ["init-maven.sh","/tmp/init-maven.sh"]
-ADD https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/rest-http/vert.x/vertx-http-booster.yaml /tmp/booster1.yaml
-ADD https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/configmap/vert.x/vertx-configmap-booster.yaml /tmp/booster2.yaml
-ADD https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/health-check/vert.x/vertx-health-check-booster.yaml /tmp/booster3.yaml
-RUN sudo chown user:user /tmp/init-maven.sh /tmp/booster*.yaml && \
+ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/heads/osio /tmp/current-osio-sha1
+RUN sudo chown user:user /tmp/init-maven.sh && \
     chmod +x /tmp/init-maven.sh && \
     /tmp/init-maven.sh && \
-    sudo rm -f /tmp/init-maven.sh
+    sudo rm -f /tmp/init-maven.sh /tmp/current-osio-sha1
+

@@ -19,7 +19,7 @@ get_repository() {
 }
 
 git_clone_and_build() {
-  CONTENT=$(cat "${1}")
+  CONTENT=$(curl -s "${1}")
   BRANCH=$(get_branch "${CONTENT}")
   REPOSITORY=$(get_repository "${CONTENT}")
   cd "${HOME}"
@@ -29,10 +29,10 @@ git_clone_and_build() {
 
   git clone -b "${BRANCH}" "${REPOSITORY}" tmp-folder
   cd tmp-folder && scl enable rh-maven33 'mvn clean package'
-  cd "${CURRENT_FOLDER}" && rm -rf tmp-folder & rm "${1}"
+  cd "${CURRENT_FOLDER}" && rm -rf tmp-folder
 }
 
-# iterate on all boosters
-for filename in /tmp/booster*.yaml; do
-  git_clone_and_build "${filename}"
-done
+
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/rest-http/vert.x/vertx-http-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/configmap/vert.x/vertx-configmap-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/health-check/vert.x/vertx-health-check-booster.yaml
