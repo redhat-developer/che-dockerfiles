@@ -57,7 +57,7 @@ ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
 
 COPY ["init-maven.sh","/tmp/init-maven.sh"]
-ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/heads/osio /tmp/current-osio-sha1
+ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/tags/v10 /tmp/current-osio-sha1
 RUN sudo chown user:user /tmp/init-maven.sh && \
     chmod +x /tmp/init-maven.sh && \
     /tmp/init-maven.sh && \

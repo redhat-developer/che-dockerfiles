@@ -32,6 +32,6 @@ git_clone_and_build() {
   cd "${CURRENT_FOLDER}" && rm -rf tmp-folder
 }
 
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/configmap/spring-boot/spring-boot-configmap-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/health-check/spring-boot/spring-boot-health-check-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/rest-http/spring-boot/spring-boot-rest-http-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/configmap/spring-boot/spring-boot-configmap-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/health-check/spring-boot/spring-boot-health-check-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/rest-http/spring-boot/spring-boot-rest-http-booster.yaml
