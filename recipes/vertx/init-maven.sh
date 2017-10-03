@@ -33,6 +33,6 @@ git_clone_and_build() {
 }
 
 
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/rest-http/vert.x/vertx-http-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/configmap/vert.x/vertx-configmap-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/osio/health-check/vert.x/vertx-health-check-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/rest-http/vert.x/vertx-http-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/configmap/vert.x/vertx-configmap-booster.yaml
+git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/health-check/vert.x/vertx-health-check-booster.yaml
