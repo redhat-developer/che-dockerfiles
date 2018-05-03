@@ -10,18 +10,10 @@
 set -e
 set -u
 
-get_branch() {
-  echo "${1}" | grep "gitRef" | awk -F : '{print $2}' | xargs
-}
-
-get_repository() {
-  echo "https://github.com/$(echo "${1}" | grep "githubRepo" | awk -F : '{print $2}' | xargs)"
-}
-
 git_clone_and_build() {
-  CONTENT=$(curl -s "${1}")
-  BRANCH=$(get_branch "${CONTENT}")
-  REPOSITORY=$(get_repository "${CONTENT}")
+  REPOSITORY=${1}
+  BRANCH=${2}
+  
   cd "${HOME}"
   CURRENT_FOLDER=$(pwd)
 
@@ -33,6 +25,6 @@ git_clone_and_build() {
 }
 
 
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/rest-http/vert.x/vertx-http-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/configmap/vert.x/vertx-configmap-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/health-check/vert.x/vertx-health-check-booster.yaml
+git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-http-booster-redhat v11
+git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-configmap-booster-redhat v12
+git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-health-checks-booster-redhat v11
