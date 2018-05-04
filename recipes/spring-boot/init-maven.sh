@@ -10,18 +10,10 @@
 set -e
 set -u
 
-get_branch() {
-  echo "${1}" | grep "gitRef" | awk -F : '{print $2}' | xargs
-}
-
-get_repository() {
-  echo "https://github.com/$(echo "${1}" | grep "githubRepo" | awk -F : '{print $2}' | xargs)"
-}
-
 git_clone_and_build() {
-  CONTENT=$(curl -s "${1}")
-  BRANCH=$(get_branch "${CONTENT}")
-  REPOSITORY=$(get_repository "${CONTENT}")
+  REPOSITORY=${1}
+  BRANCH=${2}
+  
   cd "${HOME}"
   CURRENT_FOLDER=$(pwd)
 
@@ -32,6 +24,6 @@ git_clone_and_build() {
   cd "${CURRENT_FOLDER}" && rm -rf tmp-folder
 }
 
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/configmap/spring-boot/spring-boot-configmap-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/health-check/spring-boot/spring-boot-health-check-booster.yaml
-git_clone_and_build https://raw.githubusercontent.com/openshiftio/booster-catalog/v10/rest-http/spring-boot/spring-boot-rest-http-booster.yaml
+git_clone_and_build https://github.com/snowdrop/spring-boot-configmap-booster 1.5.12-1-osio
+git_clone_and_build https://github.com/snowdrop/spring-boot-health-check-booster 1.5.12-2-redhat
+git_clone_and_build https://github.com/snowdrop/spring-boot-http-booster 1.5.12-2-redhat
