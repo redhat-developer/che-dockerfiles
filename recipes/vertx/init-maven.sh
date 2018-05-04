@@ -25,6 +25,6 @@ git_clone_and_build() {
 }
 
 
-git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-http-booster-redhat v11
-git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-configmap-booster-redhat v12
-git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-health-checks-booster-redhat v11
+git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-http-booster-redhat v12
+git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-configmap-booster-redhat v13
+git_clone_and_build https://github.com/openshiftio-vertx-boosters/vertx-health-checks-booster-redhat v12
