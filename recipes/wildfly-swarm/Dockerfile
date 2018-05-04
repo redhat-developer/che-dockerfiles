@@ -38,18 +38,6 @@ RUN sudo yum update -y && \
 RUN sudo localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG="C.UTF-8"
 
-# Give write access to /home/user for 
-# users with an arbitrary UID 
-RUN sudo chgrp -R 0 /home/user \
-  && sudo chmod -R g+rwX /home/user \
-  && sudo chgrp -R 0 /etc/passwd \
-  && sudo chmod -R g+rwX /etc/passwd \
-  && sudo chgrp -R 0 /etc/group \
-  && sudo chmod -R g+rwX /etc/group \
-  && sudo mkdir -p /projects \
-  && sudo chgrp -R 0 /projects \
-  && sudo chmod -R g+rwX /projects
-  
 # Generate passwd.template
 RUN cat /etc/passwd | \
     sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \
@@ -67,3 +55,24 @@ COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
 
 ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
+
+COPY ["init-maven.sh","/tmp/init-maven.sh"]
+ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/tags/v10 /tmp/current-osio-sha1
+RUN sudo chown user:user /tmp/init-maven.sh && \
+    chmod +x /tmp/init-maven.sh && \
+    /tmp/init-maven.sh && \
+    sudo rm -f /tmp/init-maven.sh /tmp/current-osio-sha1
+
+# Give write access to /home/user for
+# users with an arbitrary UID
+RUN sudo chgrp -R 0 /home/user \
+  && sudo chmod -R g+rwX /home/user \
+  && sudo chgrp -R 0 /etc/passwd \
+  && sudo chmod -R g+rwX /etc/passwd \
+  && sudo chgrp -R 0 /etc/group \
+  && sudo chmod -R g+rwX /etc/group \
+  && sudo mkdir -p /projects \
+  && sudo chgrp -R 0 /projects \
+  && sudo chmod -R g+rwX /projects \
+  && sudo chgrp -R 0 /tmp \
+  && sudo chmod -R g+rwX /tmp
