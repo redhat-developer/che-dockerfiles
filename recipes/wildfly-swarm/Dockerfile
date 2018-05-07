@@ -50,6 +50,11 @@ RUN cat /etc/group | \
 
 ENV HOME /home/user
 
+# Set _JAVA_OPTIONS environment variable so as to make spawned
+# java processes respect the container limit and use reasonable
+# GC configuration for small JVMs.
+ENV _JAVA_OPTIONS "-XX:+UseParallelGC -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -Xms20m"
+
 # Overwride entrypoint
 COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
 
