@@ -24,6 +24,12 @@ RUN sudo yum update -y && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
+# Install 32 bit OpenJDK. Remove 64 bit OpenJDK
+RUN sudo yum -y install java-1.8.0-openjdk-devel.i686 && \
+    sudo yum -y remove java-1.8.0-openjdk-headless.x86_64 && \
+    sudo yum clean all && \
+    java -version
+
 # Install nodejs for ls agents and OpenShift CLI
 RUN sudo yum update -y && \
     curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash - && \
