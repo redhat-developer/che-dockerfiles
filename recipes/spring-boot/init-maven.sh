@@ -6,24 +6,14 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 #
-
 set -e
 set -u
 
-git_clone_and_build() {
-  REPOSITORY=${1}
-  BRANCH=${2}
-  
-  cd "${HOME}"
-  CURRENT_FOLDER=$(pwd)
+DIR=$(cd "$(dirname "$0")"; pwd)
 
-  echo "cloning with git clone -b ${BRANCH} ${REPOSITORY} tmp-folder"
+. $DIR/build.include
 
-  git clone -b "${BRANCH}" "${REPOSITORY}" tmp-folder
-  cd tmp-folder && scl enable rh-maven33 'mvn clean package'
-  cd "${CURRENT_FOLDER}" && rm -rf tmp-folder
-}
+download_maven_deps "spring-boot" "configmap"
+download_maven_deps "spring-boot" "health-check"
+download_maven_deps "spring-boot" "rest-http"
 
-git_clone_and_build https://github.com/snowdrop/spring-boot-configmap-booster 1.5.12-1-osio
-git_clone_and_build https://github.com/snowdrop/spring-boot-health-check-booster 1.5.12-2-redhat
-git_clone_and_build https://github.com/snowdrop/spring-boot-http-booster 1.5.12-2-redhat

@@ -6,24 +6,15 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 #
-
 set -e
 set -u
 
-git_clone_and_build() {
-  REPOSITORY=${1}
-  BRANCH=${2}
-  
-  cd "${HOME}"
-  CURRENT_FOLDER=$(pwd)
+DIR=$(cd "$(dirname "$0")"; pwd)
 
-  echo "cloning with git clone -b ${BRANCH} ${REPOSITORY} tmp-folder"
+. $DIR/build.include
 
-  git clone -b "${BRANCH}" "${REPOSITORY}" tmp-folder
-  cd tmp-folder && scl enable rh-maven33 'mvn clean package'
-  cd "${CURRENT_FOLDER}" && rm -rf tmp-folder
-}
-
-git_clone_and_build https://github.com/wildfly-swarm-openshiftio-boosters/wfswarm-configmap 11
-git_clone_and_build https://github.com/wildfly-swarm-openshiftio-boosters/wfswarm-health-check 10
-git_clone_and_build https://github.com/wildfly-swarm-openshiftio-boosters/wfswarm-rest-http 13
+# Disabled for now as there is no version of the configmap booster
+# published on OSIO.
+# download_maven_deps "wildfly-swarm" "configmap"
+download_maven_deps "wildfly-swarm" "health-check"
+download_maven_deps "wildfly-swarm" "rest-http"
