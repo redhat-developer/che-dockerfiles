@@ -56,12 +56,18 @@ ENTRYPOINT ["/home/user/entrypoint.sh"]
 
 CMD tail -f /dev/null
 
-COPY ["init-maven.sh","/tmp/init-maven.sh"]
+COPY ["init-maven.sh", "util/*", "/tmp/"]
 ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/tags/v10 /tmp/current-osio-sha1
-RUN sudo chown user:user /tmp/init-maven.sh && \
+RUN sudo yum --enablerepo=extras install epel-release -y && \
+    sudo yum update -y && \
+    sudo yum install -y jq && \
+    sudo chown user:user /tmp/init-maven.sh && \
     chmod +x /tmp/init-maven.sh && \
     /tmp/init-maven.sh && \
-    sudo rm -f /tmp/init-maven.sh /tmp/current-osio-sha1
+    sudo yum remove jq -y && \
+    sudo yum remove epel-release -y && \
+    sudo yum clean all && \
+    sudo rm -rf /tmp/* /var/cache/yum
 
 # Give write access to /home/user for
 # users with an arbitrary UID

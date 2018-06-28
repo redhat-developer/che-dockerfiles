@@ -23,12 +23,11 @@ git_tag=$(git rev-parse --short HEAD)
 for d in recipes/*/ ; do
   image=$(basename $d)
 
-  echo "Building $image"
-  docker build -t ${image} ${d}
+  ./build_dockerfile.sh $d
   if [ $? -ne 0 ]; then
-     echo 'ERROR: Docker build failed'
-     exit_with_error="yes"
-     continue
+    echo 'ERROR: Docker build failed'
+    exit_with_error="yes"
+    continue
   fi
   echo 'Image built successfully'
 
