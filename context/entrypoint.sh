@@ -1,4 +1,12 @@
 #!/bin/bash
+# Copyright (c) 2012-2017 Red Hat, Inc.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
+# Contributors:
+# Red Hat, Inc. - initial implementation
+
 set -e
 
 export USER_ID=$(id -u)
@@ -24,7 +32,7 @@ fi
 
 # SSH agent is currently not supported but if we
 # do want to support it we can uncomment the code below
-# and fix SSHAgentLauncher that has SSHD port hardconded
+# and fix SSHAgentLauncher that has SSHD port hardcoded
 # to 22 and will expect the service to be available at that
 # port. And we cannot use port 22 because it's a 
 # privileged port and OpenShift will complain.
