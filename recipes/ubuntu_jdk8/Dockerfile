@@ -33,16 +33,10 @@ RUN sudo apt-get update && \
     sudo apt-get clean && \
     sudo rm -rf /var/lib/apt/lists/*
 
-# Give write access to /home/user for 
-# users with an arbitrary UID 
-RUN sudo chgrp -R 0 /home/user \
-  && sudo chmod -R g+rwX /home/user \
-  && sudo chgrp -R 0 /etc/passwd \
-  && sudo chmod -R g+rwX /etc/passwd \
-  && sudo chgrp -R 0 /etc/group \
-  && sudo chmod -R g+rwX /etc/group \
-  && sudo chgrp -R 0 /projects \
-  && sudo chmod -R g+rwX /projects
+# Give write access to /home/user for users with an arbitrary UID
+COPY --chown=user:user ["./grant-access-arbitrary-UID.sh", "/tmp/install/"]
+RUN /tmp/install/grant-access-arbitrary-UID.sh && \
+    rm -rf /tmp/install
   
 # Generate passwd.template
 RUN cat /etc/passwd | \

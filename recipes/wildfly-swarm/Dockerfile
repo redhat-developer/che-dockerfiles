@@ -10,28 +10,27 @@ FROM registry.centos.org/che-stacks/wildfly-swarm
 
 ARG OC_VERSION=3.6.173.0.30
 
-# Install nss_wrapper, gettext and OpenShift CLI
-RUN sudo yum update -y && \
-    sudo yum install -y cmake gettext make gcc git && \
-    cd /home/user/ && \
-    git clone git://git.samba.org/nss_wrapper.git && \
-    cd nss_wrapper && \
-    mkdir obj && cd obj && \
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DLIB_SUFFIX=64 .. && \
-    make && sudo make install && \
-    cd /home/user && rm -rf ./nss_wrapper && \
-    sudo yum remove -y cmake make gcc && \
-    sudo yum clean all && \
-    sudo rm -rf /tmp/* /var/cache/yum
+RUN sudo yum list installed
 
-# Install nodejs for ls agents and OpenShift CLI
-RUN sudo yum update -y && \
-    curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash - && \
-    sudo yum install -y bzip2 tar curl wget nodejs && \
-    sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
-    sudo yum remove -y wget && \ 
-    sudo yum clean all && \
-    sudo rm -rf /tmp/* /var/cache/yum
+# Install general dependencies
+COPY --chown=user:user ["./general-deps.install", "/tmp/install/"]
+RUN /tmp/install/general-deps.install ${OC_VERSION} && \
+    rm -rf /tmp/install
+
+# Install nss_wrapper
+COPY --chown=user:user ["./nss_wrapper.install", "/tmp/install/"]
+RUN /tmp/install/nss_wrapper.install && \
+    rm -rf /tmp/install
+
+# Install nodejs
+COPY --chown=user:user ["./nodejs.install", "/tmp/install/"]
+RUN /tmp/install/nodejs.install && \
+    rm -rf /tmp/install
+
+# Give write access to /home/user for users with an arbitrary UID
+COPY --chown=user:user ["./grant-access-arbitrary-UID.sh", "/tmp/install/"]
+RUN /tmp/install/grant-access-arbitrary-UID.sh && \
+    rm -rf /tmp/install
 
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
@@ -52,33 +51,17 @@ ENV HOME /home/user
 
 # Overwride entrypoint
 COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
-
 ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
 
-COPY ["init-maven.sh", "util/*", "/tmp/"]
+# Download maven dependencies
+COPY --chown=user:user ["download-maven-deps.sh", \
+                        "maven-deps.install", \
+                        "/tmp/maven-deps/"]
 ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/tags/v10 /tmp/current-osio-sha1
-RUN sudo yum --enablerepo=extras install epel-release -y && \
-    sudo yum update -y && \
-    sudo yum install -y jq && \
-    sudo chown user:user /tmp/init-maven.sh && \
-    chmod +x /tmp/init-maven.sh && \
-    /tmp/init-maven.sh && \
-    sudo yum remove jq -y && \
-    sudo yum remove epel-release -y && \
-    sudo yum clean all && \
-    sudo rm -rf /tmp/* /var/cache/yum
-
-# Give write access to /home/user for
-# users with an arbitrary UID
-RUN sudo chgrp -R 0 /home/user \
-  && sudo chmod -R g+rwX /home/user \
-  && sudo chgrp -R 0 /etc/passwd \
-  && sudo chmod -R g+rwX /etc/passwd \
-  && sudo chgrp -R 0 /etc/group \
-  && sudo chmod -R g+rwX /etc/group \
-  && sudo mkdir -p /projects \
-  && sudo chgrp -R 0 /projects \
-  && sudo chmod -R g+rwX /projects \
-  && sudo chgrp -R 0 /tmp \
-  && sudo chmod -R g+rwX /tmp
+RUN /tmp/maven-deps/maven-deps.install \
+        'wildfly-swarm' \
+        # 'configmap' \
+        'health-check' \
+        'rest-http' && \
+    rm -rf /tmp/maven-deps

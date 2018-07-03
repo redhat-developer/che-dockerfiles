@@ -6,6 +6,16 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 #
+# Download maven dependencies needed to build a booster project by cloning a github
+# repo and executing `mvn clean package`. Deletes downloaded artifacts afterwards.
+#
+# see https://forge.api.openshift.io/api/booster-catalog for a list of boosters
+#
+# usage:
+#   ./download-maven-deps.sh <mission> [<runtimes>]
+# e.g.:
+#   ./download-maven-deps.sh 'wildfly-swarm' 'health-check' 'rest-http'
+##################################
 
 set -e
 set -u
@@ -36,6 +46,10 @@ git_clone_and_build() {
 
 ##
 # Use curl to get booster catalog json file if it does not already exist
+#
+# Documentation on this endpoint is available at https://forge.api.openshift.io/swagger.yaml.
+# In particular, the `X-App: osio` header tells the server that only boosters supported on
+# OSIO should be returned.
 ##
 cache_boosters_catalog() {
   if [ ! -f ${SCRIPT_DIR}/booster-catalog.json ]; then
@@ -45,24 +59,16 @@ cache_boosters_catalog() {
   fi
 }
 
-##
-# Download maven dependencies needed to build a booster project by cloning a github
-# repo and executing `mvn clean package`. Deletes downloaded artifacts afterwards.
-#
-# see https://forge.api.openshift.io/api/booster-catalog for a list of boosters
-#
-# params:
-# ${1} - The runtime for the booster (in the catalog) -- e.g. "spring-boot"
-# ${2} - The mission for the booster (in the catalog) -- e.g. "rest-http"
-download_maven_deps() {
-  RUNTIME=${1}
-  MISSION=${2}
+cache_boosters_catalog
 
-  cache_boosters_catalog
+RUNTIME=${1}
+shift
+for MISSION in "$@"; do
+  echo "Downloading maven deps for runtime: " $RUNTIME " - " $MISSION
   BOOSTER=$(
     jq --arg MISSION $MISSION \
-       --arg RUNTIME $RUNTIME \
-       '.boosters
+        --arg RUNTIME $RUNTIME \
+        '.boosters
         | .[]
         | select(
           .mission == $MISSION and
@@ -74,4 +80,5 @@ download_maven_deps() {
   REF=$(echo $BOOSTER | jq -r '.source.git.ref')
 
   git_clone_and_build $URL $REF
-}
+done
+rm "${SCRIPT_DIR}/booster-catalog.json"
