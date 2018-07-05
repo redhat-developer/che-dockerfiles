@@ -6,29 +6,33 @@
 # Contributors:
 # Red Hat, Inc. - initial implementation
 
-FROM registry.centos.org/che-stacks/vertx
+FROM registry.centos.org/che-stacks/spring-boot
 
 ARG OC_VERSION=3.6.173.0.30
 
 # Install general dependencies
-COPY --chown=user:user ["./general-deps.install", "/tmp/install/"]
-RUN /tmp/install/general-deps.install ${OC_VERSION} && \
-    rm -rf /tmp/install
+COPY ["./context/general-deps.install", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/general-deps.install ${OC_VERSION} && \
+    sudo rm -rf /tmp/install
 
 # Install nss_wrapper
-COPY --chown=user:user ["./nss_wrapper.install", "/tmp/install/"]
-RUN /tmp/install/nss_wrapper.install && \
-    rm -rf /tmp/install
+COPY ["./context/nss_wrapper.install", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/nss_wrapper.install && \
+    sudo rm -rf /tmp/install
 
 # Install nodejs
-COPY --chown=user:user ["./nodejs.install", "/tmp/install/"]
-RUN /tmp/install/nodejs.install && \
-    rm -rf /tmp/install
+COPY ["./context/nodejs.install", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/nodejs.install && \
+    sudo rm -rf /tmp/install
 
 # Give write access to /home/user for users with an arbitrary UID
-COPY --chown=user:user ["./grant-access-arbitrary-UID.sh", "/tmp/install/"]
-RUN /tmp/install/grant-access-arbitrary-UID.sh && \
-    rm -rf /tmp/install
+COPY ["./context/grant-access-arbitrary-UID.sh", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/grant-access-arbitrary-UID.sh && \
+    sudo rm -rf /tmp/install
 
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
@@ -48,18 +52,19 @@ RUN cat /etc/group | \
 ENV HOME /home/user
 
 # Overwride entrypoint
-COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
+COPY ["./context/entrypoint.sh","/home/user/entrypoint.sh"]
 ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
 
 # Download maven dependencies
-COPY --chown=user:user ["download-maven-deps.sh", \
-                        "maven-deps.install", \
-                        "/tmp/maven-deps/"]
+COPY ["./context/download-maven-deps.sh", \
+      "./context/maven-deps.install", \
+      "/tmp/maven-deps/"]
 ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/tags/v10 /tmp/current-osio-sha1
-RUN /tmp/maven-deps/maven-deps.install \
-        'vert.x' \
+RUN sudo chown user:user -R /tmp/maven-deps && \
+    /tmp/maven-deps/maven-deps.install \
+        'spring-boot' \
         'configmap' \
         'health-check' \
         'rest-http' && \
-    rm -rf /tmp/maven-deps
+    sudo rm -rf /tmp/maven-deps

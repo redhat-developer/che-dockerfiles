@@ -14,19 +14,22 @@ ARG OC_VERSION=3.6.173.0.30
 ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}
 
 # Install general dependencies
-COPY --chown=user:user ["./general-deps.install", "/tmp/install/"]
-RUN /tmp/install/general-deps.install ${OC_VERSION} ${JAVA_VERSION} && \
-    rm -rf /tmp/install
+COPY ["./context/general-deps.install", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/general-deps.install ${OC_VERSION} && \
+    sudo rm -rf /tmp/install
 
 # Install nss_wrapper
-COPY --chown=user:user ["./nss_wrapper.install", "/tmp/install/"]
-RUN /tmp/install/nss_wrapper.install && \
-    rm -rf /tmp/install
+COPY ["./context/nss_wrapper.install", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/nss_wrapper.install && \
+    sudo rm -rf /tmp/install
 
 # Give write access to /home/user for users with an arbitrary UID
-COPY --chown=user:user ["./grant-access-arbitrary-UID.sh", "/tmp/install/"]
-RUN /tmp/install/grant-access-arbitrary-UID.sh && \
-    rm -rf /tmp/install
+COPY ["./context/grant-access-arbitrary-UID.sh", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/grant-access-arbitrary-UID.sh && \
+    sudo rm -rf /tmp/install
 
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
@@ -46,6 +49,6 @@ RUN cat /etc/group | \
 ENV HOME /home/user
 
 # Overwride entrypoint
-COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
+COPY ["./context/entrypoint.sh","/home/user/entrypoint.sh"]
 ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null

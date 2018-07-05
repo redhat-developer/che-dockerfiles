@@ -34,9 +34,10 @@ RUN sudo apt-get update && \
     sudo rm -rf /var/lib/apt/lists/*
 
 # Give write access to /home/user for users with an arbitrary UID
-COPY --chown=user:user ["./grant-access-arbitrary-UID.sh", "/tmp/install/"]
-RUN /tmp/install/grant-access-arbitrary-UID.sh && \
-    rm -rf /tmp/install
+COPY ["./context/grant-access-arbitrary-UID.sh", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/grant-access-arbitrary-UID.sh && \
+    sudo rm -rf /tmp/install
   
 # Generate passwd.template
 RUN cat /etc/passwd | \
@@ -51,4 +52,4 @@ RUN cat /etc/group | \
 ENV HOME /home/user
 
 # Overwride entrypoint
-COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
+COPY ["./context/entrypoint.sh","/home/user/entrypoint.sh"]
