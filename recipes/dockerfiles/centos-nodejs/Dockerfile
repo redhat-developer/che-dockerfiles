@@ -25,12 +25,6 @@ RUN sudo chown user:user -R /tmp/install && \
     /tmp/install/nss_wrapper.install && \
     sudo rm -rf /tmp/install
 
-# Give write access to /home/user for users with an arbitrary UID
-COPY ["./context/grant-access-arbitrary-UID.sh", "/tmp/install/"]
-RUN sudo chown user:user -R /tmp/install && \
-    /tmp/install/grant-access-arbitrary-UID.sh && \
-    sudo rm -rf /tmp/install
-
 # The following lines are needed to set the correct locale after `yum update`
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
 RUN sudo localedef -i en_US -f UTF-8 C.UTF-8
@@ -52,3 +46,9 @@ ENV HOME /home/user
 COPY ["./context/entrypoint.sh","/home/user/entrypoint.sh"]
 ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
+
+# Give write access to /home/user for users with an arbitrary UID
+COPY ["./context/grant-access-arbitrary-UID.sh", "/tmp/install/"]
+RUN sudo chown user:user -R /tmp/install && \
+    /tmp/install/grant-access-arbitrary-UID.sh && \
+    sudo rm -rf /tmp/install
