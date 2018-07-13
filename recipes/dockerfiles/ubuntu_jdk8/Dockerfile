@@ -50,6 +50,6 @@ COPY ["./context/entrypoint.sh","/home/user/entrypoint.sh"]
 
 # Give write access to /home/user for users with an arbitrary UID
 COPY ["./context/grant-access-arbitrary-UID.sh", "/tmp/install/"]
-RUN sudo chown user:user -R /tmp/install && \
+RUN sudo chown user:user /tmp/install /tmp/install/* && \
     /tmp/install/grant-access-arbitrary-UID.sh && \
     sudo rm -rf /tmp/install
