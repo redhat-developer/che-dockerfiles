@@ -22,7 +22,6 @@ set -e
 sudo yum update -y \
   && sudo yum install -y \
     cmake \
-    gcc \
   && cd /home/user/ \
   && git clone git://git.samba.org/nss_wrapper.git \
   && cd nss_wrapper \
@@ -32,6 +31,5 @@ sudo yum update -y \
   && cd /home/user && rm -rf ./nss_wrapper \
   && sudo yum remove -y \
     cmake \
-    gcc \
   && sudo yum clean all \
   && sudo rm -rf /tmp/* /var/cache/yum
