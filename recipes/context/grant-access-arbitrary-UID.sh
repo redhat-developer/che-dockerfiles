@@ -7,8 +7,8 @@
 # Contributors:
 # Red Hat, Inc. - initial implementation
 #
-# Change owner and group of /home/user, /etc/passwd, /etc/group/ and
-# /projects directories, to allow users with arbitrary UIDs.
+# Change owner and group of /home/user, /etc/passwd, /etc/group/
+# /projects and /tmp directories, to allow users with arbitrary UIDs.
 #####
 
 set -u
@@ -22,6 +22,6 @@ sudo chgrp -R 0 /home/user \
   && sudo chmod -R g+rwX /etc/group \
   && sudo mkdir -p /projects \
   && sudo chgrp -R 0 /projects \
-  && sudo chmod -R g+rwX /projects
-  # && sudo chgrp -R 0 /tmp \
-  # && sudo chmod -R g+rwX /tmp
+  && sudo chmod -R g+rwX /projects \
+  && sudo chgrp -R 0 /tmp \
+  && sudo chmod -R g+rwX /tmp
