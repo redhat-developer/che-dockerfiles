@@ -8,7 +8,7 @@
 
 FROM registry.centos.org/che-stacks/centos-dotnet20
 
-ARG OC_VERSION=3.6.173.0.30
+ARG OC_VERSION=3.9.38
 
 # Env for installing C# lang server
 ENV OMISHARP_VERSION="1.31.1"

@@ -8,7 +8,7 @@
 
 FROM registry.centos.org/che-stacks/wildfly-swarm
 
-ARG OC_VERSION=3.6.173.0.30
+ARG OC_VERSION=3.9.38
 
 RUN sudo yum list installed
 

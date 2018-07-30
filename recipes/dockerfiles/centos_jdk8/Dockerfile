@@ -8,7 +8,7 @@
 
 FROM eclipse/centos_jdk8
 
-ARG OC_VERSION=3.6.173.0.30
+ARG OC_VERSION=3.9.38
 
 # Install general dependencies
 COPY ["./context/general-deps.install", "/tmp/install/"]
@@ -32,7 +32,7 @@ RUN sudo chown user:user /tmp/install /tmp/install/* && \
 # c.f. https://github.com/CentOS/sig-cloud-instance-images/issues/71
 RUN sudo localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG="C.UTF-8"
-  
+
 # Generate passwd.template
 RUN cat /etc/passwd | \
     sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \

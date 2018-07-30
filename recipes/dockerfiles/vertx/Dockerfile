@@ -8,7 +8,7 @@
 
 FROM registry.centos.org/che-stacks/vertx
 
-ARG OC_VERSION=3.6.173.0.30
+ARG OC_VERSION=3.9.38
 
 # Install general dependencies
 COPY ["./context/general-deps.install", "/tmp/install/"]
