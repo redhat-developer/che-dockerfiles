@@ -8,7 +8,7 @@
 
 FROM eclipse/ubuntu_jdk8:latest
 
-ARG OC_VERSION=3.6.173.0.30
+ARG OC_VERSION=3.9.38
 
 # Install nss_wrapper and gettext
 RUN sudo apt-get update && \
@@ -32,7 +32,7 @@ RUN sudo apt-get update && \
     sudo apt-get remove -y wget && \
     sudo apt-get clean && \
     sudo rm -rf /var/lib/apt/lists/*
-  
+
 # Generate passwd.template
 RUN cat /etc/passwd | \
     sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \

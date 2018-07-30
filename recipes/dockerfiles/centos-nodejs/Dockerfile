@@ -9,7 +9,7 @@
 FROM registry.centos.org/che-stacks/centos-nodejs
 
 ARG JAVA_VERSION=1.8.0
-ARG OC_VERSION=3.6.173.0.30
+ARG OC_VERSION=3.9.38
 
 ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}
 
