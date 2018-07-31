@@ -12,7 +12,7 @@ ENV PHP_LS_VERSION=5.4.1 \
 USER root
 RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release-7.rpm  \
     yum-utils && \
-    yum-config-manager --enable remi-php70 && \
+    yum-config-manager --enable remi-php71 && \
     yum install -y \
         rpmdevtools \
         php-bcmath \
@@ -51,27 +51,25 @@ RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release
             chmod -R g+rwX ${f}; \
           done && \
         rm /etc/httpd/conf.d/welcome.conf && \
-        sh -c 'echo -e "; configuration for php ZendDebugger module\n; priority=90\nzend_extension=ZendDebugger.so" > /etc/php.d/zenddebugger.ini'
-
-# since http://repos.zend.com/zend-server/9.0.2/rpm_apache2.4/x86_64/zend-server-php-7.0-common-9.0.2-372.x86_64.rpm is often down,
-# it is safer to ADD the file that is available in the dockerfiles repo rather than remotely
-ADD ZendDebugger.so /usr/lib64/php/modules
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    mkdir -p ${HOME}/.composer && \
-    chown -R user ${HOME}/.composer
-
-# install PHP Language Server
-RUN mkdir -p ${HOME}/che/ls-php/php-language-server && \
-    cd ${HOME}/che/ls-php/php-language-server && \
-    composer require jetbrains/phpstorm-stubs:dev-master && \
-    composer require felixfbecker/language-server:${PHP_LS_VERSION} && \
-    composer run-script --working-dir=vendor/felixfbecker/language-server parse-stubs && \
-    mv  vendor/* . && \
-    rm -rf vendor && \
-    chgrp -R 0 ${HOME} && \
-    chmod -R g+rwX ${HOME} && \
-    wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" |  tar xvz -C /usr/local/bin
+        curl http://repos.zend.com/zend-server/9.1.4/rpm_apache2.4/x86_64/zend-server-php-7.1-common-9.1.4-331.x86_64.rpm -o ~/zend.rpm && \
+        rpmdev-extract -C ~ ~/zend.rpm && \
+        sudo cp ~/zend-server-php-7.1-common-9.1.4-331.x86_64/usr/local/zend/lib/debugger/php-7.1.x/ZendDebugger.so /usr/lib64/php/modules && \
+        rm ~/zend.rpm && \
+        rm -rf ~/zend-server-php-7.1-common-9.1.4-331.x86_64 && \
+        sh -c 'echo -e "; configuration for php ZendDebugger module\n; priority=90\nzend_extension=ZendDebugger.so" > /etc/php.d/zenddebugger.ini' && \
+        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+        mkdir -p ${HOME}/.composer && \
+        chown -R user ${HOME}/.composer && \
+        mkdir -p ${HOME}/che/ls-php/php-language-server && \
+        cd ${HOME}/che/ls-php/php-language-server && \
+        composer require jetbrains/phpstorm-stubs:dev-master && \
+        composer require felixfbecker/language-server:${PHP_LS_VERSION} && \
+        composer run-script --working-dir=vendor/felixfbecker/language-server parse-stubs && \
+        mv  vendor/* . && \
+        rm -rf vendor && \
+        chgrp -R 0 ${HOME} && \
+        chmod -R g+rwX ${HOME} && \
+        wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" |  tar xvz -C /usr/local/bin
 
 USER user
 CMD echo "apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin" >> /etc/passwd && \
