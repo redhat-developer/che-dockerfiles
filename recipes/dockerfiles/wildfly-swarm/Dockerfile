@@ -59,8 +59,8 @@ COPY ["./context/download-maven-deps.sh", \
 ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/tags/v10 /tmp/current-osio-sha1
 RUN sudo chown user:user /tmp/maven-deps /tmp/maven-deps/* && \
     /tmp/maven-deps/maven-deps.install \
-        'wildfly-swarm' \
-        # 'configmap' \
+        'thorntail' \
+        # 'configmap' \ @see https://github.com/redhat-developer/rh-che/issues/734
         'health-check' \
         'rest-http' && \
     sudo rm -rf /tmp/maven-deps
