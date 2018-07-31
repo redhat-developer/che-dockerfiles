@@ -42,12 +42,12 @@ RUN sudo yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-re
             sudo chmod -R g+rwX ${f}; \
           done && \
         sudo rm /etc/httpd/conf.d/welcome.conf && \
-        curl http://repos.zend.com/zend-server/9.0.2/rpm_apache2.4/x86_64/zend-server-php-7.0-common-9.0.2-372.x86_64.rpm -o ~/zend.rpm && \
-        rpmdev-extract -C ~ ~/zend.rpm && \
-        sudo cp ~/zend-server-php-7.0-common-9.0.2-372.x86_64/usr/local/zend/lib/debugger/php-7.0.x/ZendDebugger.so /usr/lib64/php/modules && \
-        rm ~/zend.rpm && \
-        rm -rf ~/zend-server-php-7.0-common-9.0.2-372.x86_64 && \
         sudo sh -c 'echo -e "; configuration for php ZendDebugger module\n; priority=90\nzend_extension=ZendDebugger.so" > /etc/php.d/zenddebugger.ini'
+
+# since http://repos.zend.com/zend-server/9.0.2/rpm_apache2.4/x86_64/zend-server-php-7.0-common-9.0.2-372.x86_64.rpm is often down,
+# it is safer to ADD the file that is available in the dockerfiles repo rather than remotely
+ADD ZendDebugger.so /usr/lib64/php/modules
+
 USER root
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     mkdir -p ${HOME}/.composer && \
