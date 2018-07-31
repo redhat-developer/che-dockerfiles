@@ -1,10 +1,17 @@
+# Copyright (c) 2012-2018 Red Hat, Inc.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
+# Contributors:
+# Red Hat, Inc. - initial implementation
+
 FROM registry.centos.org/che-stacks/centos-stack-base:latest
 
 ENV RUBY_MAJOR_VERSION=2 \
     RUBY_MINOR_VERSION=5
 ENV RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
-    RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}" \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}"
 ENV PATH=/home/user/bin:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin${PATH:+:${PATH}} \
     LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/local/lib64:/opt/rh/rh-ruby25/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} \
