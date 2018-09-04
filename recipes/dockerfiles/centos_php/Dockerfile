@@ -15,6 +15,7 @@ RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release
     yum-config-manager --enable remi-php71 && \
     yum install -y \
         rpmdevtools \
+        php \
         php-bcmath \
         php-cli \
         php-fpm \
