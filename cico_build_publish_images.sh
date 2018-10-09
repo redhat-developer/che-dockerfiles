@@ -45,13 +45,17 @@ for d in recipes/dockerfiles/*/ ; do
     docker push ${new_tag}
   done
 
-  # Pushing to 'push.registry.devshift.net'
-  docker login -u $DEVSHIFT_USERNAME -p $DEVSHIFT_PASSWORD push.registry.devshift.net
+  # Pushing to 'quay.io'
+  if [ -n "${QUAY_USERNAME}" -a -n "${QUAY_PASSWORD}" ]; then
+    docker login -u ${QUAY_USERNAME} -p ${QUAY_PASSWORD} quay.io
+  else
+    echo "Could not login, missing credentials for the registry"
+  fi
 
-  declare -a tags_devshift=(push.registry.devshift.net/che/${image}:latest
-                            push.registry.devshift.net/che/${image}:${git_tag})
+  declare -a tags_quay=(quay.io/openshiftio/che-${image}:latest
+                            quay.io/openshiftio/che-${image}:${git_tag})
 
-  for new_tag in "${tags_devshift[@]}"; do
+  for new_tag in "${tags_quay[@]}"; do
     echo "Tagging ${new_tag}"
     docker tag ${image}:latest ${new_tag}
     echo "Pushing ${new_tag}"
