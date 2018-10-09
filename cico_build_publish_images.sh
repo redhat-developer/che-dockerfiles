@@ -8,7 +8,7 @@ set -u
 set -e
 
 # Source build variables
-cat jenkins-env | grep -e RHCHEBOT_DOCKER_HUB_PASSWORD -e DEVSHIFT > inherit-env
+cat jenkins-env | grep -e RHCHEBOT_DOCKER_HUB_PASSWORD -e DEVSHIFT -e QUAY > inherit-env
 . inherit-env
 
 # Update machine, get required deps in place
