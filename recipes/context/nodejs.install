@@ -16,6 +16,6 @@ set -e
 sudo yum update -y \
   && curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash - \
   && sudo yum install -y \
-    nodejs \
+    nodejs | cat\
   && sudo yum clean all \
   && sudo rm -rf /tmp/* /var/cache/yum
