@@ -10,7 +10,7 @@ FROM registry.centos.org/che-stacks/centos-stack-base:latest
 ENV PHP_LS_VERSION=5.4.1 \
     OC_VERSION=3.9.38
 USER root
-RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release-7.rpm  \
+RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
     yum-utils && \
     yum-config-manager --enable remi-php71 && \
     yum install -y \
@@ -39,7 +39,7 @@ RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release
         php-pecl-imagick \
         php-pecl-redis \
         unzip \
-        httpd && \
+        httpd | cat && \
         yum --enablerepo=epel install -y fcgi && \
         yum clean all && \
         sed -i 's/\/var\/www\/html/\/projects/g'  /etc/httpd/conf/httpd.conf && \
@@ -52,7 +52,7 @@ RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release
             chmod -R g+rwX ${f}; \
           done && \
         rm /etc/httpd/conf.d/welcome.conf && \
-        curl http://repos.zend.com/zend-server/9.1.4/rpm_apache2.4/x86_64/zend-server-php-7.1-common-9.1.4-331.x86_64.rpm -o ~/zend.rpm && \
+        curl -sS http://repos.zend.com/zend-server/9.1.4/rpm_apache2.4/x86_64/zend-server-php-7.1-common-9.1.4-331.x86_64.rpm -o ~/zend.rpm && \
         rpmdev-extract -C ~ ~/zend.rpm && \
         sudo cp ~/zend-server-php-7.1-common-9.1.4-331.x86_64/usr/local/zend/lib/debugger/php-7.1.x/ZendDebugger.so /usr/lib64/php/modules && \
         rm ~/zend.rpm && \

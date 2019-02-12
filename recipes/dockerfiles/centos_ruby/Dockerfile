@@ -22,7 +22,7 @@ ENV PATH=/home/user/bin:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/r
 
 USER root
 
-RUN yum install -y centos-release-scl-rh && \
+RUN yum install -y centos-release-scl-rh | cat && \
     yum-config-manager --add-repo https://cbs.centos.org/repos/sclo7-rh-ruby25-rh-candidate/x86_64/os/ && \
     echo gpgcheck=0 >> /etc/yum.repos.d/cbs.centos.org_repos_sclo7-rh-ruby25-rh-candidate_x86_64_os_.repo && \
     INSTALL_PKGS=" \
@@ -31,12 +31,12 @@ RUN yum install -y centos-release-scl-rh && \
                   ${RUBY_SCL}-rubygem-rake \
                   ${RUBY_SCL}-rubygem-bundler \
                   " && \
-    yum install -y --setopt=tsflags=nodocs ${INSTALL_PKGS} gcc g++ make zlib-devel sqlite-devel openssl openssl-devel && \
+    yum install -y --setopt=tsflags=nodocs ${INSTALL_PKGS} gcc g++ make zlib-devel sqlite-devel openssl openssl-devel | cat && \
     rpm -V ${INSTALL_PKGS} && \
     gem install rails sqlite3 && \
     sudo chmod -R 777 /opt/rh/rh-ruby25 && \
     sudo curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash - && \
-    sudo yum install -y nodejs && \
+    sudo yum install -y nodejs | cat && \
     yum clean all -y && \
     sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin
 USER user

@@ -16,14 +16,14 @@ ENV OMNISHARP_DOWNLOAD_URL="https://github.com/OmniSharp/omnisharp-roslyn/releas
 ENV CSHARP_LS_DIR=${HOME}/che/ls-csharp
 
 # Install OpenShift CLI
-RUN sudo yum update -y && \
-    sudo yum install -y tar wget && \
+RUN sudo yum update -y | cat && \
+    sudo yum install -y tar wget | cat && \
     sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
 
 # Install C# lang server
-RUN cd ${CSHARP_LS_DIR} && wget https://github.com/OmniSharp/omnisharp-roslyn/releases/download/v1.31.1/omnisharp-linux-x64.tar.gz && \
+RUN cd ${CSHARP_LS_DIR} && wget -q https://github.com/OmniSharp/omnisharp-roslyn/releases/download/v1.31.1/omnisharp-linux-x64.tar.gz && \
     tar -xvf omnisharp-linux-x64.tar.gz --strip 1 && \
     sudo chgrp -R 0 ${HOME} && \
     sudo chmod -R g+rwX ${HOME}

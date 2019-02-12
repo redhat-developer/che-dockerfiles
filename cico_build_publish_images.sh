@@ -24,7 +24,7 @@ for d in recipes/dockerfiles/*/ ; do
   image=$(basename $d)
 
   echo "Building $image"
-  docker build -t ${image} -f ${d}/Dockerfile ./recipes
+  docker build -t ${image} -f ${d}/Dockerfile ./recipes | cat
   if [ $? -ne 0 ]; then
     echo 'ERROR: Docker build failed'
     exit_with_error="yes"
@@ -42,7 +42,7 @@ for d in recipes/dockerfiles/*/ ; do
     echo "Tagging ${new_tag}"
     docker tag ${image}:latest ${new_tag}
     echo "Pushing ${new_tag}"
-    docker push ${new_tag}
+    docker push ${new_tag} | cat
   done
 
   # Pushing to 'quay.io'
@@ -59,7 +59,7 @@ for d in recipes/dockerfiles/*/ ; do
     echo "Tagging ${new_tag}"
     docker tag ${image}:latest ${new_tag}
     echo "Pushing ${new_tag}"
-    docker push ${new_tag}
+    docker push ${new_tag} | cat
   done
 
 done
