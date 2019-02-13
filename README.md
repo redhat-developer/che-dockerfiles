@@ -26,3 +26,8 @@ The scripts in `./recipes/context` are, in short:
 - `nss_wrapper.install` is responsible for installing nss_wrapper.
 
 [1] https://forge.api.openshift.io/api/booster-catalog
+
+## Quay.io repositories
+The CI build pushes artifacts to dockerhub and [quay.io](https://quay.io/organization/openshiftio). For automatic builds to succeed, repositories should be created on quay.io beforehand, one for each dockerfile.
+
+Repository names come directly from folder names in `./recipes/dockerfiles`, with `che-` prepended (e.g. `che-centos_jdk8`). The process for creating new repos on quay.io is documented [here](https://gitlab.cee.redhat.com/service/app-interface/tree/master#create-a-quay-repository-for-an-onboarded-app-app-sreapp-1yml) and must be done for any new dockerimages added to this repo.
