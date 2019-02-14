@@ -16,8 +16,10 @@ ENV OMNISHARP_DOWNLOAD_URL="https://github.com/OmniSharp/omnisharp-roslyn/releas
 ENV CSHARP_LS_DIR=${HOME}/che/ls-csharp
 
 # Install OpenShift CLI
-RUN sudo yum update -y | cat && \
-    sudo yum install -y tar wget | cat && \
+RUN sudo yum update -y -d 1 && \
+    sudo yum install -y -d 1 \
+      tar \
+      wget && \
     sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" | sudo tar xvz -C /usr/local/bin && \
     sudo yum clean all && \
     sudo rm -rf /tmp/* /var/cache/yum
