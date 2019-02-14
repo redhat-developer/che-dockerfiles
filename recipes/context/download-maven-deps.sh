@@ -40,7 +40,7 @@ git_clone_and_build() {
   echo "cloning with git clone -b ${BRANCH} ${REPOSITORY} tmp-folder"
 
   git clone -b "${BRANCH}" "${REPOSITORY}" tmp-folder
-  cd tmp-folder && scl enable rh-maven33 'mvn clean package'
+  cd tmp-folder && scl enable rh-maven33 'mvn -B clean package'
   cd "${CURRENT_FOLDER}" && rm -rf tmp-folder
 }
 
