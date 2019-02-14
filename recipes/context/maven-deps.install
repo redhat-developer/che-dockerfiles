@@ -16,9 +16,9 @@ set -e
 
 SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 
-sudo yum --enablerepo=extras install epel-release -y | cat && \
-  sudo yum update -y | cat && \
-  sudo yum install -y jq | cat && \
+sudo yum --enablerepo=extras install epel-release -y && \
+  sudo yum update -y -d 1 && \
+  sudo yum install -y -d 1 jq && \
   /${SCRIPT_DIR}/download-maven-deps.sh $@ && \
   sudo yum remove jq -y && \
   sudo yum remove epel-release -y && \

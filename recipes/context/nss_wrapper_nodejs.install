@@ -19,11 +19,11 @@
 set -u
 set -e
 
-sudo yum update -y | cat \
-  && sudo yum install -y \
+sudo yum update -y -d 1 \
+  && sudo yum install -y -d 1 \
     cmake \
     gcc \
-    make | cat \
+    make \
   && cd /home/user/ \
   && git clone git://git.samba.org/nss_wrapper.git \
   && cd nss_wrapper \

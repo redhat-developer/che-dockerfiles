@@ -22,15 +22,15 @@ set -e
 OC_VERSION=${1}
 JAVA_VERSION=${2:-1.8.0}
 
-sudo yum update -y | cat \
-  && sudo yum install -y \
+sudo yum update -y -d 1 \
+  && sudo yum install -y -d 1 \
     bzip2 \
     curl \
     gettext \
     git \
     java-${JAVA_VERSION}-openjdk-devel \
     tar \
-    wget | cat \
+    wget \
   && sudo wget -qO- "https://mirror.openshift.com/pub/openshift-v3/clients/${OC_VERSION}/linux/oc.tar.gz" \
     | sudo tar xvz -C /usr/local/bin \
   && sudo yum clean all \

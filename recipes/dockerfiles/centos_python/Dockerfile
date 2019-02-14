@@ -14,8 +14,9 @@ ENV PATH=/opt/rh/rh-python36/root/usr/bin${PATH:+:${PATH}} \
     XDG_DATA_DIRS="/opt/rh/rh-python36/root/usr/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" \
     OC_VERSION=3.9.38
 USER root
-RUN yum update -y | cat && \
-    yum install rh-python36 -y | cat && \
+RUN yum update -y -d 1 && \
+    yum install -y -d 1 \
+      rh-python36 && \
     yum clean all
 
 RUN pip install --upgrade pip && \

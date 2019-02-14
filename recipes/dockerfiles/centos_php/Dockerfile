@@ -10,10 +10,10 @@ FROM registry.centos.org/che-stacks/centos-stack-base:latest
 ENV PHP_LS_VERSION=5.4.1 \
     OC_VERSION=3.9.38
 USER root
-RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
+RUN yum install -y -d 1 epel-release http://rpms.remirepo.net/enterprise/remi-release-7.rpm  \
     yum-utils && \
     yum-config-manager --enable remi-php71 && \
-    yum install -y \
+    yum install -y -d 1 \
         rpmdevtools \
         php \
         php-bcmath \
@@ -39,7 +39,7 @@ RUN yum install -y epel-release http://rpms.remirepo.net/enterprise/remi-release
         php-pecl-imagick \
         php-pecl-redis \
         unzip \
-        httpd | cat && \
+        httpd && \
         yum --enablerepo=epel install -y fcgi && \
         yum clean all && \
         sed -i 's/\/var\/www\/html/\/projects/g'  /etc/httpd/conf/httpd.conf && \
