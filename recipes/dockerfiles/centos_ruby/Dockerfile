@@ -26,11 +26,12 @@ RUN yum install -y -d 1 \
         centos-release-scl-rh && \
     yum-config-manager --add-repo https://cbs.centos.org/repos/sclo7-rh-ruby25-rh-candidate/x86_64/os/ && \
     echo gpgcheck=0 >> /etc/yum.repos.d/cbs.centos.org_repos_sclo7-rh-ruby25-rh-candidate_x86_64_os_.repo && \
-    yum install -y -d 1 --setopt=tsflags=nodocs \
+    INSTALL_PKGS=" \
         ${RUBY_SCL} \
         ${RUBY_SCL}-ruby-devel \
         ${RUBY_SCL}-rubygem-rake \
-        ${RUBY_SCL}-rubygem-bundler \
+        ${RUBY_SCL}-rubygem-bundler" && \
+    yum install -y -d 1 --setopt=tsflags=nodocs ${INSTALL_PKGS} \
         gcc \
         g++ \
         make \
