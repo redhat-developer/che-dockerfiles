@@ -19,11 +19,10 @@ RUN sudo chown user:user /tmp/install /tmp/install/* && \
     /tmp/install/general-deps.install ${OC_VERSION} && \
     sudo rm -rf /tmp/install
 
-# Install nss_wrapper -- Note for this image (cf other dockerfiles), we need a different script
-# as the default nss_wrapper.install script removes `make`, which removes node as a dependency.
-COPY ["./context/nss_wrapper_nodejs.install", "/tmp/install/"]
+# Install nss_wrapper
+COPY ["./context/nss_wrapper.install", "/tmp/install/"]
 RUN sudo chown user:user /tmp/install /tmp/install/* && \
-    /tmp/install/nss_wrapper_nodejs.install && \
+    /tmp/install/nss_wrapper.install && \
     sudo rm -rf /tmp/install
 
 # The following lines are needed to set the correct locale after `yum update`
