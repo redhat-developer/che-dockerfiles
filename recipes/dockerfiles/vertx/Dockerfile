@@ -50,19 +50,6 @@ COPY ["./context/entrypoint.sh","/home/user/entrypoint.sh"]
 ENTRYPOINT ["/home/user/entrypoint.sh"]
 CMD tail -f /dev/null
 
-# Download maven dependencies
-COPY ["./context/download-maven-deps.sh", \
-      "./context/maven-deps.install", \
-      "/tmp/maven-deps/"]
-ADD https://api.github.com/repos/openshiftio/booster-catalog/git/refs/tags/v10 /tmp/current-osio-sha1
-RUN sudo chown user:user /tmp/maven-deps /tmp/maven-deps/* && \
-    /tmp/maven-deps/maven-deps.install \
-        'vert.x' \
-        'configmap' \
-        'health-check' \
-        'rest-http' && \
-    sudo rm -rf /tmp/maven-deps
-
 # Give write access to /home/user for users with an arbitrary UID
 COPY ["./context/grant-access-arbitrary-UID.sh", "/tmp/install/"]
 RUN sudo chown user:user /tmp/install /tmp/install/* && \
