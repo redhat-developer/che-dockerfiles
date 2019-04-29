@@ -6,7 +6,7 @@
 # Contributors:
 # Red Hat, Inc. - initial implementation
 
-FROM registry.centos.org/che-stacks/centos-quarkus.io-jdk8
+FROM registry.centos.org/che-stacks/centos-quarkus-io-jdk8
 
 ARG OC_VERSION=3.9.38
 
